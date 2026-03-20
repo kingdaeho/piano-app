@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Music } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -41,16 +42,18 @@ export default function LoginPage() {
   };
 
   return (
-    <Card className="shadow-lg">
-      <CardHeader className="items-center space-y-2 pb-2">
-        <div className="text-4xl">🎹</div>
-        <h1 className="text-2xl font-bold text-[#1A237E]">
-          Piano Practice Companion
+    <Card className="card-elevated shadow-2xl">
+      <CardHeader className="items-center space-y-3 pb-4 pt-8">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-md">
+          <Music className="h-8 w-8" />
+        </div>
+        <h1 className="text-2xl font-extrabold tracking-tight text-accent-foreground">
+          Piano Companion
         </h1>
-        <p className="text-sm text-[#616161]">로그인하여 연습을 시작하세요</p>
+        <p className="text-sm text-muted-foreground">로그인하여 연습을 시작하세요</p>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleLogin} className="space-y-4">
+      <CardContent className="px-6 pb-6">
+        <form onSubmit={handleLogin} className="space-y-5">
           <div className="space-y-2">
             <Label htmlFor="email">이메일</Label>
             <Input
@@ -73,15 +76,15 @@ export default function LoginPage() {
           </div>
           <Button
             type="submit"
-            className="w-full bg-[#3F51B5] hover:bg-[#283593]"
+            className="btn-cta w-full rounded-xl text-primary-foreground"
             disabled={isSubmitting}
           >
             {isSubmitting ? "로그인 중..." : "로그인"}
           </Button>
         </form>
-        <div className="mt-4 text-center text-sm text-[#616161]">
+        <div className="mt-4 text-center text-sm text-muted-foreground">
           계정이 없으신가요?{" "}
-          <Link href="/signup" className="font-medium text-[#3F51B5]">
+          <Link href="/signup" className="font-medium text-primary">
             회원가입
           </Link>
         </div>

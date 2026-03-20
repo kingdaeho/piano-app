@@ -29,7 +29,7 @@ export function ProgressRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#E8EAF6"
+          className="stroke-accent"
           strokeWidth={strokeWidth}
         />
         <circle
@@ -37,12 +37,11 @@ export function ProgressRing({
           cy={size / 2}
           r={radius}
           fill="none"
-          stroke="#3F51B5"
+          className="stroke-primary transition-all duration-700 ease-out"
           strokeWidth={strokeWidth}
           strokeDasharray={circumference}
           strokeDashoffset={offset}
           strokeLinecap="round"
-          className="transition-all duration-700 ease-out"
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">

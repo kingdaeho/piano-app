@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { CheckCircle2, Clock, Music, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -53,34 +54,40 @@ export default function PracticeSummaryPage() {
   };
 
   return (
-    <div className="space-y-6 px-5 py-6">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold">연습 완료!</h1>
-        <p className="mt-2 text-sm text-[#616161]">오늘 총 연습 시간</p>
-        <p className="mt-1 text-4xl font-bold text-[#3F51B5]">
+    <div className="space-y-6 px-5 pb-8 pt-8">
+      <div className="flex flex-col items-center space-y-3 text-center">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-success/15">
+          <CheckCircle2 className="h-9 w-9 text-success" />
+        </div>
+        <h1 className="text-[1.75rem] font-extrabold tracking-tight text-foreground">연습 완료!</h1>
+        <p className="text-sm text-muted-foreground">수고하셨습니다!</p>
+        <p className="text-5xl font-bold tracking-tight text-primary">
           {formatDuration(elapsedSeconds || totalSeconds)}
         </p>
       </div>
 
       {/* Per-piece breakdown */}
-      <Card>
-        <CardContent className="space-y-3 pt-6">
-          <h2 className="font-medium">곡별 연습 시간</h2>
+      <Card className="card-elevated">
+        <CardContent className="space-y-3 px-5 pb-5 pt-5">
+          <div className="flex items-center gap-2">
+            <Music className="h-4 w-4 text-primary" />
+            <h2 className="font-semibold text-foreground">곡별 연습 시간</h2>
+          </div>
           {practicedPieces.map((piece) => {
             const percent = totalSeconds > 0
               ? Math.round((piece.durationSeconds / totalSeconds) * 100)
               : 0;
             return (
-              <div key={piece.pieceId} className="space-y-1">
+              <div key={piece.pieceId} className="space-y-1.5">
                 <div className="flex items-center justify-between text-sm">
-                  <span>{piece.title}</span>
-                  <span className="text-[#616161]">
+                  <span className="text-foreground">{piece.title}</span>
+                  <span className="font-medium text-muted-foreground">
                     {formatDuration(piece.durationSeconds)}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Progress value={percent} className="h-2 flex-1" />
-                  <span className="text-xs text-[#616161]">{percent}%</span>
+                  <span className="text-xs font-medium text-muted-foreground">{percent}%</span>
                 </div>
               </div>
             );
@@ -89,21 +96,23 @@ export default function PracticeSummaryPage() {
       </Card>
 
       {/* Mood */}
-      <Card>
-        <CardContent className="pt-6">
-          <h2 className="mb-3 font-medium">오늘 연습 어땠나요?</h2>
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5">
+          <h2 className="mb-4 font-semibold text-foreground">오늘 연습 어땠나요?</h2>
           <div className="flex justify-around">
             {moods.map((m) => (
               <button
                 key={m}
                 onClick={() => setMood(m)}
                 className={cn(
-                  "flex flex-col items-center gap-1 rounded-lg px-3 py-2 transition-colors",
-                  mood === m ? "bg-[#E8EAF6]" : "hover:bg-gray-50"
+                  "flex flex-col items-center gap-1.5 rounded-xl px-3 py-2.5 transition-all",
+                  mood === m
+                    ? "bg-accent scale-105 shadow-sm"
+                    : "hover:bg-muted"
                 )}
               >
                 <span className="text-2xl">{MOOD_EMOJI[m]}</span>
-                <span className="text-xs text-[#616161]">{MOOD_LABEL[m]}</span>
+                <span className="text-[11px] font-medium text-muted-foreground">{MOOD_LABEL[m]}</span>
               </button>
             ))}
           </div>
@@ -111,16 +120,19 @@ export default function PracticeSummaryPage() {
       </Card>
 
       {/* Goal Progress */}
-      <Card>
-        <CardContent className="pt-6">
-          <h2 className="mb-2 font-medium">목표 달성률</h2>
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5">
+          <div className="mb-3 flex items-center gap-2">
+            <Target className="h-4 w-4 text-primary" />
+            <h2 className="font-semibold text-foreground">목표 달성률</h2>
+          </div>
           <div className="flex items-center gap-3">
             <Progress value={goalPercent} className="h-3 flex-1" />
-            <span className="text-sm font-medium text-[#3F51B5]">
+            <span className="text-sm font-bold text-primary">
               {goalPercent}%
             </span>
           </div>
-          <p className="mt-1 text-sm text-[#616161]">
+          <p className="mt-1.5 text-sm text-muted-foreground">
             {achievedMinutes}/{goalMinutes}분
           </p>
         </CardContent>
@@ -128,7 +140,7 @@ export default function PracticeSummaryPage() {
 
       <Button
         onClick={handleSave}
-        className="w-full bg-[#3F51B5] hover:bg-[#283593]"
+        className="btn-cta w-full rounded-xl text-primary-foreground"
         size="lg"
       >
         저장하기

@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Play } from "lucide-react";
+import { Play, Clock } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { EmptyState } from "@/components/common/empty-state";
 import { usePracticeSessions } from "@/api/hooks";
 import {
   formatDate,
@@ -21,14 +21,14 @@ export default function PracticeHistoryPage() {
   if (isLoading || !sessions) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#3F51B5] border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-4 px-5 py-6">
-      <h1 className="text-2xl font-bold">연습 기록</h1>
+    <div className="space-y-5 px-5 pb-8 pt-7">
+      <h1 className="text-2xl font-extrabold tracking-tight text-foreground">연습 기록</h1>
 
       {/* View Toggle */}
       <div className="flex gap-2">
@@ -36,7 +36,6 @@ export default function PracticeHistoryPage() {
           variant={viewMode === "daily" ? "default" : "outline"}
           size="sm"
           onClick={() => setViewMode("daily")}
-          className={viewMode === "daily" ? "bg-[#3F51B5]" : ""}
         >
           일별
         </Button>
@@ -44,50 +43,60 @@ export default function PracticeHistoryPage() {
           variant={viewMode === "weekly" ? "default" : "outline"}
           size="sm"
           onClick={() => setViewMode("weekly")}
-          className={viewMode === "weekly" ? "bg-[#3F51B5]" : ""}
         >
           주별
         </Button>
       </div>
 
       {/* Sessions List */}
-      <div className="space-y-3">
-        {sessions.map((session) => (
-          <div key={session.id}>
-            <div className="mb-1 flex items-center justify-between text-sm text-[#616161]">
-              <span>{formatDate(session.startedAt)}</span>
-              <span>총 {formatDuration(session.totalDurationSeconds)}</span>
+      {sessions.length === 0 ? (
+        <EmptyState
+          icon={<Clock className="h-8 w-8" />}
+          title="연습 기록이 없습니다"
+          description="첫 연습을 시작해보세요!"
+          actionLabel="연습 시작"
+          onAction={() => router.push("/practice/timer")}
+        />
+      ) : (
+        <div className="space-y-4">
+          {sessions.map((session) => (
+            <div key={session.id}>
+              <div className="mb-1.5 flex items-center justify-between text-sm">
+                <span className="font-medium text-foreground">{formatDate(session.startedAt)}</span>
+                <span className="text-muted-foreground">총 {formatDuration(session.totalDurationSeconds)}</span>
+              </div>
+              <Card className="card-elevated">
+                <CardContent className="space-y-2.5 px-5 pb-4 pt-4">
+                  {session.pieces.map((piece) => (
+                    <div
+                      key={piece.pieceId}
+                      className="flex items-center justify-between"
+                    >
+                      <span className="text-sm text-foreground">{piece.title}</span>
+                      <span className="text-sm font-medium text-muted-foreground">
+                        {formatDuration(piece.durationSeconds)}
+                      </span>
+                    </div>
+                  ))}
+                  {session.mood && (
+                    <div className="flex items-center gap-1.5 border-t border-border pt-2.5 text-sm text-muted-foreground">
+                      <span>컨디션:</span>
+                      <span>{MOOD_EMOJI[session.mood]}</span>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </div>
-            <Card className="transition-shadow hover:shadow-md">
-              <CardContent className="space-y-2 pt-4">
-                {session.pieces.map((piece) => (
-                  <div
-                    key={piece.pieceId}
-                    className="flex items-center justify-between"
-                  >
-                    <span className="text-sm">{piece.title}</span>
-                    <span className="text-sm text-[#616161]">
-                      {formatDuration(piece.durationSeconds)}
-                    </span>
-                  </div>
-                ))}
-                {session.mood && (
-                  <div className="flex items-center gap-1 pt-1 text-sm text-[#616161]">
-                    <span>컨디션:</span>
-                    <span>{MOOD_EMOJI[session.mood]}</span>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
 
-      {/* Start Practice Button */}
+      {/* Start Practice Button - H3: CTA prominence */}
       <div className="fixed bottom-20 left-1/2 -translate-x-1/2">
         <Button
           onClick={() => router.push("/practice/timer")}
-          className="flex h-12 items-center gap-2 rounded-full bg-[#3F51B5] px-6 shadow-lg hover:bg-[#283593]"
+          className="btn-cta flex h-12 items-center gap-2 rounded-full px-7 text-primary-foreground"
+          size="lg"
         >
           <Play className="h-5 w-5 fill-current" />
           연습 시작

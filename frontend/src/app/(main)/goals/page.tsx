@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft } from "lucide-react";
+import { ChevronLeft, Target, Flame } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -48,17 +48,22 @@ export default function GoalSettingsPage() {
   };
 
   return (
-    <div className="space-y-6 px-5 py-6">
+    <div className="space-y-6 px-5 pb-8 pt-7">
       <div className="flex items-center gap-3">
-        <button onClick={() => router.back()}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.back()}
+          className="h-10 w-10 rounded-full"
+        >
           <ChevronLeft className="h-6 w-6" />
-        </button>
-        <h1 className="text-xl font-bold">목표 설정</h1>
+        </Button>
+        <h1 className="text-xl font-bold text-foreground">목표 설정</h1>
       </div>
 
       {/* Daily Goal */}
-      <Card>
-        <CardContent className="pt-4">
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5">
           <Label className="text-base font-medium">하루 연습 목표 시간</Label>
           <div className="mt-3 flex flex-wrap gap-2">
             {dailyOptions.map((mins) => (
@@ -67,10 +72,7 @@ export default function GoalSettingsPage() {
                 variant={dailyGoal === mins ? "default" : "outline"}
                 size="sm"
                 onClick={() => setDailyGoal(mins)}
-                className={cn(
-                  "min-w-[60px]",
-                  dailyGoal === mins && "bg-[#3F51B5]"
-                )}
+                className="min-w-[60px]"
               >
                 {mins}분
               </Button>
@@ -80,8 +82,8 @@ export default function GoalSettingsPage() {
       </Card>
 
       {/* Weekly Days */}
-      <Card>
-        <CardContent className="pt-4">
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5">
           <Label className="text-base font-medium">
             주간 연습 일수 목표
           </Label>
@@ -92,10 +94,7 @@ export default function GoalSettingsPage() {
                 variant={weeklyDays === days ? "default" : "outline"}
                 size="sm"
                 onClick={() => setWeeklyDays(days)}
-                className={cn(
-                  "min-w-[60px]",
-                  weeklyDays === days && "bg-[#3F51B5]"
-                )}
+                className="min-w-[60px]"
               >
                 {days}일
               </Button>
@@ -105,8 +104,8 @@ export default function GoalSettingsPage() {
       </Card>
 
       {/* Weekly Time */}
-      <Card>
-        <CardContent className="pt-4">
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5">
           <Label className="text-base font-medium">
             주간 연습 시간 목표
           </Label>
@@ -117,10 +116,7 @@ export default function GoalSettingsPage() {
                 variant={weeklyMinutes === mins ? "default" : "outline"}
                 size="sm"
                 onClick={() => setWeeklyMinutes(mins)}
-                className={cn(
-                  "min-w-[80px]",
-                  weeklyMinutes === mins && "bg-[#3F51B5]"
-                )}
+                className="min-w-[80px]"
               >
                 {mins / 60}시간
               </Button>
@@ -131,7 +127,7 @@ export default function GoalSettingsPage() {
 
       <Button
         onClick={handleSave}
-        className="w-full bg-[#3F51B5] hover:bg-[#283593]"
+        className="btn-cta w-full rounded-xl text-primary-foreground"
         size="lg"
       >
         저장하기

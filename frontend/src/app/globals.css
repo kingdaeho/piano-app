@@ -26,6 +26,15 @@
   --color-input: var(--input);
   --color-border: var(--border);
   --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-streak: var(--streak);
+  --color-primary-hover: var(--primary-hover);
+  --color-nav-bg: var(--nav-bg);
+  --color-nav-inactive: var(--nav-inactive);
+  --color-nav-inactive-hover: var(--nav-inactive-hover);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -56,6 +65,7 @@
   --popover-foreground: #212121;
   --primary: #3F51B5;
   --primary-foreground: #FFFFFF;
+  --primary-hover: #283593;
   --secondary: #FFC107;
   --secondary-foreground: #212121;
   --muted: #F5F5F5;
@@ -63,6 +73,11 @@
   --accent: #E8EAF6;
   --accent-foreground: #1A237E;
   --destructive: #F44336;
+  --success: #4CAF50;
+  --success-foreground: #FFFFFF;
+  --warning: #FF9800;
+  --warning-foreground: #FFFFFF;
+  --streak: #FF6D00;
   --border: #E0E0E0;
   --input: #E0E0E0;
   --ring: #3F51B5;
@@ -80,6 +95,9 @@
   --sidebar-accent-foreground: #1A237E;
   --sidebar-border: #E0E0E0;
   --sidebar-ring: #3F51B5;
+  --nav-bg: rgba(255, 255, 255, 0.95);
+  --nav-inactive: #9E9E9E;
+  --nav-inactive-hover: #616161;
 }
 
 .dark {
@@ -91,6 +109,7 @@
   --popover-foreground: #E0E0E0;
   --primary: #7986CB;
   --primary-foreground: #FFFFFF;
+  --primary-hover: #5C6BC0;
   --secondary: #FFC107;
   --secondary-foreground: #212121;
   --muted: #2C2C2C;
@@ -98,6 +117,11 @@
   --accent: #2C2C2C;
   --accent-foreground: #C5CAE9;
   --destructive: #F44336;
+  --success: #66BB6A;
+  --success-foreground: #FFFFFF;
+  --warning: #FFB74D;
+  --warning-foreground: #212121;
+  --streak: #FF8A65;
   --border: #424242;
   --input: #424242;
   --ring: #7986CB;
@@ -114,6 +138,9 @@
   --sidebar-accent-foreground: #C5CAE9;
   --sidebar-border: #424242;
   --sidebar-ring: #7986CB;
+  --nav-bg: rgba(30, 30, 30, 0.95);
+  --nav-inactive: #757575;
+  --nav-inactive-hover: #BDBDBD;
 }
 
 @layer base {
@@ -130,4 +157,48 @@
 
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Card depth - C1 audit fix */
+.card-elevated {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.2s ease;
+}
+.card-elevated:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+.dark .card-elevated {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+.dark .card-elevated:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* CTA gradient button - H3 audit fix */
+.btn-cta {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+  box-shadow: 0 4px 14px rgba(63, 81, 181, 0.35);
+  transition: all 0.2s ease;
+}
+.btn-cta:hover {
+  box-shadow: 0 6px 20px rgba(63, 81, 181, 0.45);
+  transform: translateY(-1px);
+}
+.btn-cta:active {
+  transform: translateY(0);
+}
+.dark .btn-cta {
+  box-shadow: 0 4px 14px rgba(121, 134, 203, 0.3);
+}
+.dark .btn-cta:hover {
+  box-shadow: 0 6px 20px rgba(121, 134, 203, 0.4);
+}
+
+/* Section heading - H1 audit fix */
+.section-heading {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted-foreground);
 }

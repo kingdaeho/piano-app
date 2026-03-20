@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Music } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -45,14 +46,16 @@ export default function SignupPage() {
   };
 
   return (
-    <Card className="shadow-lg">
-      <CardHeader className="items-center space-y-2 pb-2">
-        <div className="text-4xl">🎹</div>
-        <h1 className="text-2xl font-bold text-[#1A237E]">회원가입</h1>
-        <p className="text-sm text-[#616161]">피아노 연습을 시작해보세요</p>
+    <Card className="card-elevated shadow-2xl">
+      <CardHeader className="items-center space-y-3 pb-4 pt-8">
+        <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-md">
+          <Music className="h-8 w-8" />
+        </div>
+        <h1 className="text-2xl font-extrabold tracking-tight text-accent-foreground">Piano Companion</h1>
+        <p className="text-sm text-muted-foreground">피아노 연습을 시작해보세요</p>
       </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSignup} className="space-y-4">
+      <CardContent className="px-6 pb-6">
+        <form onSubmit={handleSignup} className="space-y-5">
           <div className="space-y-2">
             <Label htmlFor="name">이름</Label>
             <Input
@@ -84,15 +87,15 @@ export default function SignupPage() {
           </div>
           <Button
             type="submit"
-            className="w-full bg-[#3F51B5] hover:bg-[#283593]"
+            className="btn-cta w-full rounded-xl text-primary-foreground"
             disabled={isSubmitting}
           >
             {isSubmitting ? "가입 중..." : "가입하기"}
           </Button>
         </form>
-        <div className="mt-4 text-center text-sm text-[#616161]">
+        <div className="mt-4 text-center text-sm text-muted-foreground">
           이미 계정이 있으신가요?{" "}
-          <Link href="/login" className="font-medium text-[#3F51B5]">
+          <Link href="/login" className="font-medium text-primary">
             로그인
           </Link>
         </div>

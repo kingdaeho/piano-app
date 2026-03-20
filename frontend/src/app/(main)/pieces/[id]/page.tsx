@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, Pencil } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { usePiece } from "@/api/hooks";
 import { StarRating } from "@/components/common/star-rating";
@@ -23,57 +24,61 @@ export default function PieceDetailPage({
   if (isLoading || !piece) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#3F51B5] border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-4 px-5 py-6">
+    <div className="space-y-5 px-5 pb-8 pt-7">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <button onClick={() => router.back()}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.back()}
+        >
           <ChevronLeft className="h-6 w-6" />
-        </button>
+        </Button>
         <div />
-        <button className="text-[#3F51B5]">
+        <Button variant="ghost" size="icon" className="text-primary">
           <Pencil className="h-5 w-5" />
-        </button>
+        </Button>
       </div>
 
       {/* Title */}
       <div>
-        <h1 className="text-xl font-bold">{piece.title}</h1>
+        <h1 className="text-xl font-bold text-foreground">{piece.title}</h1>
         {piece.composer && (
-          <p className="text-[#616161]">{piece.composer}</p>
+          <p className="text-muted-foreground">{piece.composer}</p>
         )}
       </div>
 
       {/* Info */}
-      <Card>
-        <CardContent className="space-y-3 pt-4">
+      <Card className="card-elevated">
+        <CardContent className="space-y-3 px-5 pb-5 pt-5">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-[#616161]">상태</span>
-            <Badge className="bg-[#E8EAF6] text-[#1A237E]">
+            <span className="text-sm text-muted-foreground">상태</span>
+            <Badge className="bg-accent text-accent-foreground">
               {PIECE_STATUS_LABEL[piece.status]}
             </Badge>
           </div>
           {piece.difficulty && (
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#616161]">난이도</span>
+              <span className="text-sm text-muted-foreground">난이도</span>
               <StarRating value={piece.difficulty} readonly size={16} />
             </div>
           )}
           {piece.genre && (
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#616161]">장르/교재</span>
-              <span className="text-sm">{piece.genre}</span>
+              <span className="text-sm text-muted-foreground">장르/교재</span>
+              <span className="text-sm text-foreground">{piece.genre}</span>
             </div>
           )}
           {piece.startedAt && (
             <div className="flex items-center justify-between">
-              <span className="text-sm text-[#616161]">등록일</span>
-              <span className="text-sm">
+              <span className="text-sm text-muted-foreground">등록일</span>
+              <span className="text-sm text-foreground">
                 {formatDateFull(piece.startedAt)}
               </span>
             </div>
@@ -82,12 +87,12 @@ export default function PieceDetailPage({
       </Card>
 
       {/* Progress */}
-      <Card>
-        <CardContent className="pt-4">
-          <h2 className="mb-3 font-medium">진행도</h2>
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5">
+          <h2 className="mb-3 font-semibold text-foreground">진행도</h2>
           <div className="flex items-center gap-3">
             <Progress value={piece.progressPercent} className="h-3 flex-1" />
-            <span className="text-lg font-bold text-[#3F51B5]">
+            <span className="text-lg font-bold text-primary">
               {piece.progressPercent}%
             </span>
           </div>
@@ -96,10 +101,10 @@ export default function PieceDetailPage({
 
       {/* Memo */}
       {piece.memo && (
-        <Card>
-          <CardContent className="pt-4">
-            <h2 className="mb-2 font-medium">메모</h2>
-            <p className="text-sm text-[#616161]">{piece.memo}</p>
+        <Card className="card-elevated">
+          <CardContent className="px-5 pb-5 pt-5">
+            <h2 className="mb-2 font-semibold text-foreground">메모</h2>
+            <p className="text-sm text-muted-foreground">{piece.memo}</p>
           </CardContent>
         </Card>
       )}

@@ -52,7 +52,7 @@ export function PieceSelector({
         </SheetHeader>
         <div className="space-y-4 pt-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#9E9E9E]" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder="곡명 검색..."
               value={search}
@@ -64,7 +64,7 @@ export function PieceSelector({
           <div className="max-h-[55vh] space-y-4 overflow-y-auto">
             {practicing && practicing.length > 0 && (
               <div>
-                <p className="mb-2 text-sm font-medium text-[#616161]">
+                <p className="mb-2 text-sm font-medium text-muted-foreground">
                   연습 중인 곡
                 </p>
                 <div className="space-y-2">
@@ -78,19 +78,34 @@ export function PieceSelector({
                       className={cn(
                         "flex w-full items-center justify-between rounded-lg border p-3 text-left transition-colors",
                         selectedPieceId === piece.id
-                          ? "border-[#3F51B5] bg-[#E8EAF6]"
-                          : "hover:bg-gray-50"
+                          ? "border-primary bg-accent"
+                          : "hover:bg-muted"
                       )}
                     >
                       <div>
-                        <p className="text-sm font-medium">{piece.title}</p>
+                        <p className="text-sm font-medium text-foreground">{piece.title}</p>
                         {piece.composer && (
-                          <p className="text-xs text-[#9E9E9E]">
+                          <p className="text-xs text-muted-foreground">
                             {piece.composer}
                           </p>
                         )}
                       </div>
                       <div className="flex items-center gap-2">
+                        {piece.difficulty && (
+                          <Badge
+                            variant="outline"
+                            className={cn(
+                              "text-xs",
+                              piece.difficulty <= 2
+                                ? "border-green-300 bg-green-50 text-green-700 dark:border-green-700 dark:bg-green-950 dark:text-green-400"
+                                : piece.difficulty <= 3
+                                  ? "border-amber-300 bg-amber-50 text-amber-700 dark:border-amber-700 dark:bg-amber-950 dark:text-amber-400"
+                                  : "border-red-300 bg-red-50 text-red-700 dark:border-red-700 dark:bg-red-950 dark:text-red-400"
+                            )}
+                          >
+                            {"★".repeat(piece.difficulty)}
+                          </Badge>
+                        )}
                         <Badge
                           variant="outline"
                           className="text-xs"
@@ -98,7 +113,7 @@ export function PieceSelector({
                           {PIECE_STATUS_LABEL[piece.status]}
                         </Badge>
                         {selectedPieceId === piece.id && (
-                          <Check className="h-5 w-5 text-[#3F51B5]" />
+                          <Check className="h-5 w-5 text-primary" />
                         )}
                       </div>
                     </button>
@@ -109,7 +124,7 @@ export function PieceSelector({
 
             {others && others.length > 0 && (
               <div>
-                <p className="mb-2 text-sm font-medium text-[#616161]">
+                <p className="mb-2 text-sm font-medium text-muted-foreground">
                   전체 곡 목록
                 </p>
                 <div className="space-y-2">
@@ -123,11 +138,11 @@ export function PieceSelector({
                       className={cn(
                         "flex w-full items-center justify-between rounded-lg border p-3 text-left transition-colors",
                         selectedPieceId === piece.id
-                          ? "border-[#3F51B5] bg-[#E8EAF6]"
-                          : "hover:bg-gray-50"
+                          ? "border-primary bg-accent"
+                          : "hover:bg-muted"
                       )}
                     >
-                      <p className="text-sm font-medium">{piece.title}</p>
+                      <p className="text-sm font-medium text-foreground">{piece.title}</p>
                       <Badge
                         variant="outline"
                         className="text-xs"

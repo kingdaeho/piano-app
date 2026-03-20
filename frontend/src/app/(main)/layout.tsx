@@ -8,7 +8,7 @@ export default function MainLayout({
 }) {
   return (
     <AuthGuard>
-      <div className="mx-auto min-h-screen max-w-lg bg-[#FAFAFA]">
+      <div className="mx-auto min-h-screen max-w-lg bg-background">
         <main className="pb-20">{children}</main>
         <BottomNav />
       </div>

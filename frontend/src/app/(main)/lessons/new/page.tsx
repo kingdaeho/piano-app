@@ -62,24 +62,27 @@ export default function NewLessonNotePage() {
   };
 
   return (
-    <div className="space-y-4 px-5 py-6">
+    <div className="space-y-5 px-5 pb-8 pt-7">
       <div className="flex items-center justify-between">
-        <button onClick={() => router.back()}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.back()}
+        >
           <X className="h-6 w-6" />
-        </button>
-        <h1 className="text-lg font-semibold">레슨 노트 작성</h1>
+        </Button>
+        <h1 className="text-lg font-semibold text-foreground">레슨 노트 작성</h1>
         <Button
           size="sm"
           onClick={handleSave}
-          className="bg-[#3F51B5] hover:bg-[#283593]"
         >
           저장
         </Button>
       </div>
 
       {/* Date & Time */}
-      <Card>
-        <CardContent className="space-y-3 pt-4">
+      <Card className="card-elevated">
+        <CardContent className="space-y-3 px-5 pb-5 pt-5">
           <div className="grid grid-cols-3 gap-3">
             <div className="col-span-3">
               <Label>날짜</Label>
@@ -116,7 +119,7 @@ export default function NewLessonNotePage() {
           {selectedPieces.map((p) => (
             <Badge
               key={p.id}
-              className="bg-[#E8EAF6] text-[#1A237E]"
+              className="bg-accent text-accent-foreground"
             >
               {p.title}
               <button
@@ -175,9 +178,14 @@ export default function NewLessonNotePage() {
                 onChange={(e) => updateAssignment(i, e.target.value)}
               />
               {assignments.length > 1 && (
-                <button onClick={() => removeAssignment(i)}>
-                  <Trash2 className="h-4 w-4 text-[#F44336]" />
-                </button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => removeAssignment(i)}
+                  className="text-destructive"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
               )}
             </div>
           ))}
@@ -190,7 +198,7 @@ export default function NewLessonNotePage() {
 
       <Button
         onClick={handleSave}
-        className="w-full bg-[#3F51B5] hover:bg-[#283593]"
+        className="btn-cta w-full rounded-xl text-primary-foreground"
         size="lg"
       >
         저장하기

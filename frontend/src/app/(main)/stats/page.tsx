@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, Settings } from "lucide-react";
+import { ChevronLeft, ChevronRight, Settings, Clock, Calendar, TrendingUp, Target, Flame } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useWeeklyStats, useGoals } from "@/api/hooks";
 import { formatDurationHM } from "@/lib/format";
@@ -32,12 +33,16 @@ export default function StatsPage() {
   ];
 
   return (
-    <div className="space-y-4 px-5 py-6">
+    <div className="space-y-5 px-5 pb-8 pt-7">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">통계</h1>
-        <button onClick={() => router.push("/goals")}>
-          <Settings className="h-5 w-5 text-[#616161]" />
-        </button>
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">통계</h1>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.push("/goals")}
+        >
+          <Settings className="h-5 w-5 text-muted-foreground" />
+        </Button>
       </div>
 
       {/* Tab Switcher */}
@@ -48,7 +53,6 @@ export default function StatsPage() {
             variant={tab === t.key ? "default" : "outline"}
             size="sm"
             onClick={() => setTab(t.key)}
-            className={tab === t.key ? "bg-[#3F51B5]" : ""}
           >
             {t.label}
           </Button>
@@ -76,65 +80,82 @@ function WeeklyView({
   return (
     <div className="space-y-4">
       {/* Week Navigation */}
-      <div className="flex items-center justify-center gap-4 text-sm">
-        <ChevronLeft className="h-5 w-5 cursor-pointer text-[#616161]" />
-        <span className="font-medium">
+      <div className="flex items-center justify-center gap-2 text-sm">
+        <Button variant="ghost" size="icon" className="h-11 w-11">
+          <ChevronLeft className="h-5 w-5 text-muted-foreground" />
+        </Button>
+        <span className="font-medium text-foreground">
           {stats.weekStart} ~ {stats.weekEnd}
         </span>
-        <ChevronRight className="h-5 w-5 cursor-pointer text-[#616161]" />
+        <Button variant="ghost" size="icon" className="h-11 w-11">
+          <ChevronRight className="h-5 w-5 text-muted-foreground" />
+        </Button>
       </div>
 
       {/* Summary */}
-      <Card>
-        <CardContent className="pt-4">
-          <h2 className="mb-3 font-medium">이번 주 요약</h2>
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5">
+          <h2 className="mb-3 font-semibold text-foreground">이번 주 요약</h2>
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-xs text-[#9E9E9E]">총 연습 시간</p>
-              <p className="text-xl font-bold">
-                {formatDurationHM(stats.totalDurationSeconds)}
-              </p>
-              {stats.changePercent !== 0 && (
-                <p
-                  className={`text-xs ${stats.changePercent > 0 ? "text-[#4CAF50]" : "text-[#F44336]"}`}
-                >
-                  {stats.changePercent > 0 ? "+" : ""}
-                  {stats.changePercent.toFixed(1)}% vs 지난주
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Clock className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">총 연습 시간</p>
+                <p className="text-xl font-bold text-foreground">
+                  {formatDurationHM(stats.totalDurationSeconds)}
                 </p>
-              )}
+                {stats.changePercent !== 0 && (
+                  <p
+                    className={`flex items-center gap-0.5 text-xs ${stats.changePercent > 0 ? "text-success" : "text-destructive"}`}
+                  >
+                    <TrendingUp className="h-3 w-3" />
+                    {stats.changePercent > 0 ? "+" : ""}
+                    {stats.changePercent.toFixed(1)}% vs 지난주
+                  </p>
+                )}
+              </div>
             </div>
-            <div>
-              <p className="text-xs text-[#9E9E9E]">연습 일수</p>
-              <p className="text-xl font-bold">{stats.practiceDays}일</p>
+            <div className="flex items-start gap-3">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <Calendar className="h-4 w-4 text-primary" />
+              </div>
+              <div>
+                <p className="text-xs text-muted-foreground">연습 일수</p>
+                <p className="text-xl font-bold text-foreground">{stats.practiceDays}일</p>
+              </div>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Daily Chart */}
-      <Card>
-        <CardContent className="pt-4">
-          <h2 className="mb-3 font-medium">일별 연습 시간</h2>
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5">
+          <h2 className="mb-3 font-semibold text-foreground">일별 연습 시간</h2>
           <div className="h-[180px]">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
                 <XAxis
                   dataKey="day"
-                  tick={{ fontSize: 12, fill: "#616161" }}
+                  tick={{ fontSize: 12 }}
                   axisLine={false}
                   tickLine={false}
+                  className="fill-muted-foreground"
                 />
                 <YAxis
-                  tick={{ fontSize: 11, fill: "#9E9E9E" }}
+                  tick={{ fontSize: 11 }}
                   axisLine={false}
                   tickLine={false}
                   width={30}
+                  className="fill-muted-foreground"
                 />
                 <Bar dataKey="minutes" radius={[4, 4, 0, 0]}>
                   {chartData.map((entry, index) => (
                     <Cell
                       key={index}
-                      fill={entry.minutes > 0 ? "#3F51B5" : "#E0E0E0"}
+                      className={entry.minutes > 0 ? "fill-primary" : "fill-border"}
                     />
                   ))}
                 </Bar>
@@ -145,15 +166,15 @@ function WeeklyView({
       </Card>
 
       {/* Piece Stats */}
-      <Card>
-        <CardContent className="pt-4">
-          <h2 className="mb-3 font-medium">곡별 연습 비율</h2>
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5">
+          <h2 className="mb-3 font-semibold text-foreground">곡별 연습 비율</h2>
           <div className="space-y-3">
             {stats.pieceStats.map((piece) => (
               <div key={piece.pieceId} className="space-y-1">
                 <div className="flex items-center justify-between text-sm">
-                  <span>{piece.title}</span>
-                  <span className="text-[#616161]">{piece.percent}%</span>
+                  <span className="text-foreground">{piece.title}</span>
+                  <span className="text-muted-foreground">{piece.percent}%</span>
                 </div>
                 <Progress value={piece.percent} className="h-2" />
               </div>
@@ -173,34 +194,41 @@ function GoalsView({
   return (
     <div className="space-y-4">
       {/* Daily Goal */}
-      <Card>
-        <CardContent className="pt-4">
-          <h2 className="mb-3 font-medium">일일 목표</h2>
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5">
+          <div className="mb-3 flex items-center gap-2">
+            <Target className="h-5 w-5 text-primary" />
+            <h2 className="font-semibold text-foreground">일일 목표</h2>
+          </div>
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <span>하루 목표</span>
-              <span className="font-medium">
+              <span className="text-foreground">하루 목표</span>
+              <span className="font-medium text-foreground">
                 {goals.daily.targetMinutes}분
               </span>
             </div>
             <Progress value={goals.daily.percent} className="h-3" />
-            <p className="text-sm text-[#616161]">
-              {goals.daily.achievedMinutes}/{goals.daily.targetMinutes}분 (
-              {goals.daily.percent}%)
-            </p>
+            <div className="flex items-center justify-between">
+              <p className="text-sm text-muted-foreground">
+                {goals.daily.achievedMinutes}/{goals.daily.targetMinutes}분
+              </p>
+              <span className={`text-lg font-bold ${goals.daily.percent >= 100 ? "text-success" : "text-primary"}`}>
+                {goals.daily.percent}%
+              </span>
+            </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Weekly Goal */}
-      <Card>
-        <CardContent className="pt-4">
-          <h2 className="mb-3 font-medium">주간 목표</h2>
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5">
+          <h2 className="mb-3 font-semibold text-foreground">주간 목표</h2>
           <div className="space-y-3">
             <div>
               <div className="flex items-center justify-between text-sm">
-                <span>연습 일수</span>
-                <span>
+                <span className="text-foreground">연습 일수</span>
+                <span className="text-foreground">
                   {goals.weekly.achievedDays}/{goals.weekly.targetDays}일
                 </span>
               </div>
@@ -213,8 +241,8 @@ function GoalsView({
             </div>
             <div>
               <div className="flex items-center justify-between text-sm">
-                <span>연습 시간</span>
-                <span>
+                <span className="text-foreground">연습 시간</span>
+                <span className="text-foreground">
                   {goals.weekly.achievedMinutes}/{goals.weekly.targetMinutes}분
                 </span>
               </div>
@@ -232,13 +260,15 @@ function GoalsView({
       </Card>
 
       {/* Streak */}
-      <Card>
-        <CardContent className="pt-4 text-center">
-          <p className="text-3xl">🔥</p>
-          <p className="text-2xl font-bold text-[#FF6D00]">
+      <Card className="card-elevated">
+        <CardContent className="px-5 pb-5 pt-5 text-center">
+          <div className="mx-auto mb-1 flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-950">
+            <Flame className="h-6 w-6 text-orange-500" />
+          </div>
+          <p className="text-2xl font-bold text-[--streak]">
             {goals.streak.currentDays}일 연속 달성!
           </p>
-          <p className="mt-1 text-sm text-[#616161]">
+          <p className="mt-1 text-sm text-muted-foreground">
             최장 스트릭: {goals.streak.longestDays}일
           </p>
         </CardContent>
@@ -246,19 +276,19 @@ function GoalsView({
 
       {/* Piece Goals */}
       {goals.pieceGoals.length > 0 && (
-        <Card>
-          <CardContent className="pt-4">
-            <h2 className="mb-3 font-medium">곡 완성 목표</h2>
+        <Card className="card-elevated">
+          <CardContent className="px-5 pb-5 pt-5">
+            <h2 className="mb-3 font-semibold text-foreground">곡 완성 목표</h2>
             <div className="space-y-4">
               {goals.pieceGoals.map((g) => (
-                <div key={g.id} className="space-y-1">
+                <div key={g.id} className="space-y-1.5">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="font-medium">{g.piece.title}</span>
-                    <span className="text-[#616161]">
+                    <span className="font-medium text-foreground">{g.piece.title}</span>
+                    <Badge variant="outline" className="text-xs font-medium">
                       D-{g.daysRemaining}
-                    </span>
+                    </Badge>
                   </div>
-                  <p className="text-xs text-[#9E9E9E]">
+                  <p className="text-xs text-muted-foreground">
                     목표일: {g.targetDate}
                   </p>
                   <div className="flex items-center gap-2">
@@ -266,7 +296,9 @@ function GoalsView({
                       value={g.currentProgressPercent}
                       className="h-2 flex-1"
                     />
-                    <span className="text-xs">{g.currentProgressPercent}%</span>
+                    <span className={`text-sm font-semibold ${g.currentProgressPercent >= 80 ? "text-success" : "text-foreground"}`}>
+                      {g.currentProgressPercent}%
+                    </span>
                   </div>
                 </div>
               ))}

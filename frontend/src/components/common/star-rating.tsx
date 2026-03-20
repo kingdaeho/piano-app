@@ -32,8 +32,8 @@ export function StarRating({
             size={size}
             className={cn(
               i < value
-                ? "fill-[#FFC107] text-[#FFC107]"
-                : "fill-none text-[#E0E0E0]"
+                ? "fill-secondary text-secondary"
+                : "fill-none text-border"
             )}
           />
         </button>

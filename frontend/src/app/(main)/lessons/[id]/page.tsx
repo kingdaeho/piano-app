@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, Pencil } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { useLessonNote, useLessonNotes, useToggleAssignment } from "@/api/hooks";
@@ -25,7 +26,7 @@ export default function LessonNoteDetailPage({
   if (isLoading || !note) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#3F51B5] border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
       </div>
     );
   }
@@ -39,22 +40,26 @@ export default function LessonNoteDetailPage({
     : null;
 
   return (
-    <div className="space-y-4 px-5 py-6">
+    <div className="space-y-5 px-5 pb-8 pt-7">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <button onClick={() => router.back()}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.back()}
+        >
           <ChevronLeft className="h-6 w-6" />
-        </button>
-        <h1 className="text-lg font-semibold">
+        </Button>
+        <h1 className="text-lg font-semibold text-foreground">
           {note.lessonNumber}회차 레슨 노트
         </h1>
-        <button className="text-[#3F51B5]">
+        <Button variant="ghost" size="icon" className="text-primary">
           <Pencil className="h-5 w-5" />
-        </button>
+        </Button>
       </div>
 
       {/* Date */}
-      <p className="text-sm text-[#616161]">
+      <p className="text-sm text-muted-foreground">
         {formatDateFull(note.lessonDate)}
         {note.startTime && note.endTime && (
           <span>
@@ -69,7 +74,7 @@ export default function LessonNoteDetailPage({
         {note.pieces.map((p) => (
           <Badge
             key={p.id}
-            className="bg-[#E8EAF6] text-[#1A237E]"
+            className="bg-accent text-accent-foreground"
           >
             {p.title}
           </Badge>
@@ -78,11 +83,11 @@ export default function LessonNoteDetailPage({
 
       {/* Content */}
       {note.content && (
-        <Card>
-          <CardContent className="pt-4">
-            <h2 className="mb-2 font-medium">레슨 내용</h2>
+        <Card className="card-elevated">
+          <CardContent className="px-5 pb-5 pt-5">
+            <h2 className="mb-2 font-semibold text-foreground">레슨 내용</h2>
             <Separator className="mb-3" />
-            <div className="whitespace-pre-wrap text-sm text-[#212121]">
+            <div className="whitespace-pre-wrap text-sm text-foreground">
               {note.content}
             </div>
           </CardContent>
@@ -91,11 +96,11 @@ export default function LessonNoteDetailPage({
 
       {/* Feedback */}
       {note.teacherFeedback && (
-        <Card>
-          <CardContent className="pt-4">
-            <h2 className="mb-2 font-medium">선생님 피드백</h2>
+        <Card className="card-elevated">
+          <CardContent className="px-5 pb-5 pt-5">
+            <h2 className="mb-2 font-medium text-foreground">선생님 피드백</h2>
             <Separator className="mb-3" />
-            <div className="whitespace-pre-wrap text-sm text-[#212121]">
+            <div className="whitespace-pre-wrap text-sm text-foreground">
               {note.teacherFeedback}
             </div>
           </CardContent>
@@ -104,9 +109,9 @@ export default function LessonNoteDetailPage({
 
       {/* Assignments */}
       {note.assignments.length > 0 && (
-        <Card>
-          <CardContent className="pt-4">
-            <h2 className="mb-2 font-medium">과제</h2>
+        <Card className="card-elevated">
+          <CardContent className="px-5 pb-5 pt-5">
+            <h2 className="mb-2 font-semibold text-foreground">과제</h2>
             <Separator className="mb-3" />
             <div className="space-y-3">
               {note.assignments.map((a) => (
@@ -121,7 +126,7 @@ export default function LessonNoteDetailPage({
                     }
                   />
                   <span
-                    className={`text-sm ${a.isCompleted ? "text-[#9E9E9E] line-through" : "text-[#212121]"}`}
+                    className={`text-sm ${a.isCompleted ? "text-muted-foreground line-through" : "text-foreground"}`}
                   >
                     {a.content}
                   </span>
@@ -137,7 +142,7 @@ export default function LessonNoteDetailPage({
         {prevNote ? (
           <button
             onClick={() => router.push(`/lessons/${prevNote.id}`)}
-            className="flex items-center text-sm text-[#3F51B5]"
+            className="flex items-center text-sm text-primary"
           >
             <ChevronLeft className="h-4 w-4" />
             {prevNote.lessonNumber}회차
@@ -148,7 +153,7 @@ export default function LessonNoteDetailPage({
         {nextNote ? (
           <button
             onClick={() => router.push(`/lessons/${nextNote.id}`)}
-            className="flex items-center text-sm text-[#3F51B5]"
+            className="flex items-center text-sm text-primary"
           >
             {nextNote.lessonNumber}회차
             <ChevronRight className="h-4 w-4" />

@@ -74,9 +74,11 @@ export default function TimerPage() {
 
   if (showStartSelector && !isRunning) {
     return (
-      <div className="space-y-6 px-5 py-6">
-        <h1 className="text-2xl font-bold">연습 시작</h1>
-        <p className="text-[#616161]">연습할 곡을 선택하세요</p>
+      <div className="space-y-6 px-5 py-8">
+        <div className="space-y-1">
+          <h1 className="text-2xl font-extrabold tracking-tight text-foreground">연습 시작</h1>
+          <p className="text-muted-foreground">연습할 곡을 선택하세요</p>
+        </div>
         <PieceSelector
           open={true}
           onOpenChange={(open) => {
@@ -90,36 +92,44 @@ export default function TimerPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center px-5 py-6">
+    <div className="flex min-h-screen flex-col items-center px-5 pb-8 pt-6">
       <div className="mb-2 flex w-full items-center justify-between">
-        <h1 className="text-lg font-semibold text-[#3F51B5]">연습 중</h1>
+        <div className="flex items-center gap-2">
+          <span className="relative flex h-2.5 w-2.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary" />
+          </span>
+          <h1 className="text-lg font-bold text-primary">연습 중</h1>
+        </div>
       </div>
 
       {/* Timer Ring */}
-      <div className="my-8">
-        <ProgressRing percent={percent} size={220} strokeWidth={14}>
-          <span className="font-mono text-4xl font-bold text-[#212121]">
+      <div className="my-10">
+        <ProgressRing percent={percent} size={240} strokeWidth={16}>
+          <span className="font-mono text-6xl font-bold tracking-tight text-foreground">
             {formatDurationTimer(elapsedSeconds)}
           </span>
         </ProgressRing>
       </div>
 
       {/* Current Piece */}
-      <Card className="mb-4 w-full">
-        <CardContent className="pt-4">
+      <Card className="card-elevated mb-4 w-full">
+        <CardContent className="px-5 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Music className="h-5 w-5 text-[#3F51B5]" />
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent">
+                <Music className="h-5 w-5 text-primary" />
+              </div>
               <div>
-                <p className="font-medium">{currentPieceTitle}</p>
-                <p className="text-sm text-[#616161]">
-                  이 곡 연습 시간: {formatDuration(currentPieceStartTime)}
+                <p className="font-semibold text-foreground">{currentPieceTitle}</p>
+                <p className="text-sm text-muted-foreground">
+                  {formatDuration(currentPieceStartTime)}
                 </p>
               </div>
             </div>
             <button
               onClick={() => setShowPieceSelector(true)}
-              className="flex items-center text-sm text-[#3F51B5]"
+              className="flex items-center rounded-lg px-2 py-1 text-sm font-medium text-primary hover:bg-accent"
             >
               곡 변경 <ChevronRight className="h-4 w-4" />
             </button>
@@ -129,30 +139,32 @@ export default function TimerPage() {
 
       {/* Practiced Pieces */}
       {practicedPieces.length > 0 && (
-        <Card className="mb-4 w-full">
-          <CardContent className="pt-4">
-            <p className="mb-2 text-sm font-medium text-[#616161]">
+        <Card className="card-elevated mb-4 w-full">
+          <CardContent className="px-5 py-4">
+            <p className="section-heading mb-3">
               오늘 연습한 곡
             </p>
-            {practicedPieces.map((piece) => (
-              <div
-                key={piece.pieceId}
-                className="flex items-center justify-between py-1"
-              >
-                <span className="text-sm">{piece.title}</span>
-                <span className="text-sm text-[#616161]">
-                  {formatDuration(piece.durationSeconds)}
-                </span>
-              </div>
-            ))}
+            <div className="space-y-2">
+              {practicedPieces.map((piece) => (
+                <div
+                  key={piece.pieceId}
+                  className="flex items-center justify-between"
+                >
+                  <span className="text-sm text-foreground">{piece.title}</span>
+                  <span className="text-sm font-medium text-muted-foreground">
+                    {formatDuration(piece.durationSeconds)}
+                  </span>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       )}
 
       {/* Memo */}
-      <Card className="mb-6 w-full">
-        <CardContent className="pt-4">
-          <p className="mb-2 text-sm font-medium text-[#616161]">연습 메모</p>
+      <Card className="card-elevated mb-8 w-full">
+        <CardContent className="px-5 py-4">
+          <p className="section-heading mb-3">연습 메모</p>
           <Textarea
             placeholder="오늘 연습에 대한 메모를 남겨보세요..."
             value={memo}
@@ -168,24 +180,24 @@ export default function TimerPage() {
           <Button
             onClick={resume}
             size="lg"
-            className="h-16 w-16 rounded-full bg-[#3F51B5] hover:bg-[#283593]"
+            className="btn-cta h-18 w-18 rounded-full text-primary-foreground"
           >
-            <Play className="h-8 w-8 fill-current" />
+            <Play className="h-9 w-9 fill-current" />
           </Button>
         ) : (
           <Button
             onClick={pause}
             size="lg"
-            className="h-16 w-16 rounded-full bg-[#3F51B5] hover:bg-[#283593]"
+            className="btn-cta h-18 w-18 rounded-full text-primary-foreground"
           >
-            <Pause className="h-8 w-8" />
+            <Pause className="h-9 w-9" />
           </Button>
         )}
         <Button
           onClick={handleStop}
           size="lg"
           variant="destructive"
-          className="flex h-16 items-center gap-2 rounded-full px-8"
+          className="flex h-14 items-center gap-2 rounded-full px-8 shadow-lg"
         >
           <Square className="h-6 w-6 fill-current" />
           종료

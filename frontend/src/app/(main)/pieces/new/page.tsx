@@ -57,14 +57,17 @@ export default function NewPiecePage() {
   return (
     <div className="space-y-4 px-5 py-6">
       <div className="flex items-center justify-between">
-        <button onClick={() => router.back()}>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => router.back()}
+        >
           <X className="h-6 w-6" />
-        </button>
-        <h1 className="text-lg font-semibold">곡 등록</h1>
+        </Button>
+        <h1 className="text-lg font-semibold text-foreground">곡 등록</h1>
         <Button
           size="sm"
           onClick={handleSave}
-          className="bg-[#3F51B5] hover:bg-[#283593]"
         >
           저장
         </Button>
@@ -114,16 +117,16 @@ export default function NewPiecePage() {
                   className={cn(
                     "flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors",
                     status === s
-                      ? "bg-[#E8EAF6] text-[#1A237E] font-medium"
-                      : "hover:bg-gray-50"
+                      ? "bg-accent text-accent-foreground font-medium"
+                      : "hover:bg-muted"
                   )}
                 >
                   <span
                     className={cn(
                       "h-4 w-4 rounded-full border-2",
                       status === s
-                        ? "border-[#3F51B5] bg-[#3F51B5]"
-                        : "border-[#E0E0E0]"
+                        ? "border-primary bg-primary"
+                        : "border-border"
                     )}
                   />
                   {PIECE_STATUS_LABEL[s]}
@@ -146,7 +149,7 @@ export default function NewPiecePage() {
 
       <Button
         onClick={handleSave}
-        className="w-full bg-[#3F51B5] hover:bg-[#283593]"
+        className="w-full"
         size="lg"
       >
         저장하기
