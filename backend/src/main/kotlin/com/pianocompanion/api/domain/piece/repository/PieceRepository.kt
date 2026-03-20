@@ -36,4 +36,6 @@ interface PieceRepository : JpaRepository<Piece, Long> {
     fun findActivePiecesByUserId(userId: Long): List<Piece>
 
     fun countByUserIdAndStatusAndDeletedAtIsNull(userId: Long, status: PieceStatus): Long
+
+    fun findByIdInAndUserIdAndDeletedAtIsNull(ids: List<Long>, userId: Long): List<Piece>
 }

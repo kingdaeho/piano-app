@@ -115,16 +115,24 @@ class GoalService(
     }
 
     private fun calculateStreak(userId: Long, today: LocalDate, zoneId: ZoneId, dailyGoalMinutes: Int): StreakView {
+        val rangeStart = today.minusDays(MAX_STREAK_CHECK_DAYS.toLong()).atStartOfDay(zoneId).toInstant()
+        val rangeEnd = today.plusDays(1).atStartOfDay(zoneId).toInstant()
+
+        val sessions = practiceSessionRepository.findCompletedSessionsInRange(userId, rangeStart, rangeEnd)
+
+        val dailyMinutes: Map<LocalDate, Int> = sessions
+            .groupBy { it.startedAt.atZone(zoneId).toLocalDate() }
+            .mapValues { (_, daySessions) ->
+                daySessions.sumOf { it.totalDurationSeconds } / SECONDS_PER_MINUTE
+            }
+
         var currentStreak = 0
         var longestStreak = 0
         var tempStreak = 0
-        var checkDate = today
 
         for (i in 0 until MAX_STREAK_CHECK_DAYS) {
-            val dayStart = checkDate.atStartOfDay(zoneId).toInstant()
-            val dayEnd = checkDate.plusDays(1).atStartOfDay(zoneId).toInstant()
-            val dayDuration = practiceSessionRepository.sumDurationInRange(userId, dayStart, dayEnd)
-            val dayMinutes = dayDuration / SECONDS_PER_MINUTE
+            val checkDate = today.minusDays(i.toLong())
+            val dayMinutes = dailyMinutes[checkDate] ?: 0
 
             if (dayMinutes >= dailyGoalMinutes) {
                 tempStreak++
@@ -138,7 +146,6 @@ class GoalService(
                 longestStreak = maxOf(longestStreak, tempStreak)
                 tempStreak = 0
             }
-            checkDate = checkDate.minusDays(1)
         }
         longestStreak = maxOf(longestStreak, tempStreak, currentStreak)
 

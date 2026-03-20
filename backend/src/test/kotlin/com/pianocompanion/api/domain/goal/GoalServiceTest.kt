@@ -44,6 +44,7 @@ class GoalServiceTest : BehaviorSpec({
             every { userRepository.findById(userId) } returns Optional.of(user)
             every { practiceSessionRepository.sumDurationInRange(eq(userId), any(), any()) } returns 0
             every { practiceSessionRepository.countDistinctPracticeDaysInRange(eq(userId), any(), any()) } returns 0
+            every { practiceSessionRepository.findCompletedSessionsInRange(eq(userId), any(), any()) } returns emptyList()
             every {
                 goalRepository.findByUserIdAndTypeInAndIsActiveTrue(userId, listOf(GoalType.PIECE_COMPLETION))
             } returns emptyList()
@@ -65,6 +66,7 @@ class GoalServiceTest : BehaviorSpec({
             every { userRepository.findById(userId) } returns Optional.of(user)
             every { practiceSessionRepository.sumDurationInRange(eq(userId), any(), any()) } returns 1800
             every { practiceSessionRepository.countDistinctPracticeDaysInRange(eq(userId), any(), any()) } returns 1
+            every { practiceSessionRepository.findCompletedSessionsInRange(eq(userId), any(), any()) } returns emptyList()
             every {
                 goalRepository.findByUserIdAndTypeInAndIsActiveTrue(userId, listOf(GoalType.PIECE_COMPLETION))
             } returns emptyList()
@@ -162,6 +164,7 @@ class GoalServiceTest : BehaviorSpec({
             every { userRepository.findById(userId) } returns Optional.of(userWith30MinGoal)
             every { practiceSessionRepository.sumDurationInRange(eq(userId), any(), any()) } returns 3600
             every { practiceSessionRepository.countDistinctPracticeDaysInRange(eq(userId), any(), any()) } returns 1
+            every { practiceSessionRepository.findCompletedSessionsInRange(eq(userId), any(), any()) } returns emptyList()
             every {
                 goalRepository.findByUserIdAndTypeInAndIsActiveTrue(userId, listOf(GoalType.PIECE_COMPLETION))
             } returns emptyList()
@@ -183,6 +186,7 @@ class GoalServiceTest : BehaviorSpec({
             every { userRepository.findById(userId) } returns Optional.of(zeroGoalUser)
             every { practiceSessionRepository.sumDurationInRange(eq(userId), any(), any()) } returns 1800
             every { practiceSessionRepository.countDistinctPracticeDaysInRange(eq(userId), any(), any()) } returns 1
+            every { practiceSessionRepository.findCompletedSessionsInRange(eq(userId), any(), any()) } returns emptyList()
             every {
                 goalRepository.findByUserIdAndTypeInAndIsActiveTrue(userId, listOf(GoalType.PIECE_COMPLETION))
             } returns emptyList()
@@ -200,6 +204,7 @@ class GoalServiceTest : BehaviorSpec({
             every { userRepository.findById(userId) } returns Optional.of(user)
             every { practiceSessionRepository.sumDurationInRange(eq(userId), any(), any()) } returns 0
             every { practiceSessionRepository.countDistinctPracticeDaysInRange(eq(userId), any(), any()) } returns 0
+            every { practiceSessionRepository.findCompletedSessionsInRange(eq(userId), any(), any()) } returns emptyList()
 
             val goal = Goal(
                 userId = userId,
@@ -223,6 +228,7 @@ class GoalServiceTest : BehaviorSpec({
             every { userRepository.findById(userId) } returns Optional.of(user)
             every { practiceSessionRepository.sumDurationInRange(eq(userId), any(), any()) } returns 0
             every { practiceSessionRepository.countDistinctPracticeDaysInRange(eq(userId), any(), any()) } returns 0
+            every { practiceSessionRepository.findCompletedSessionsInRange(eq(userId), any(), any()) } returns emptyList()
 
             val goal = Goal(
                 userId = userId,

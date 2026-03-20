@@ -10,8 +10,6 @@ import com.pianocompanion.api.domain.piece.dto.PieceSummaryView
 import com.pianocompanion.api.domain.piece.repository.PieceRepository
 import com.pianocompanion.api.domain.practice.dto.DailyStatView
 import com.pianocompanion.api.domain.practice.repository.PracticeSessionRepository
-import com.pianocompanion.api.domain.user.repository.UserRepository
-import com.pianocompanion.api.global.exception.EntityNotFoundException
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.DayOfWeek
@@ -21,7 +19,6 @@ import java.time.temporal.TemporalAdjusters
 
 @Service
 class DashboardService(
-    private val userRepository: UserRepository,
     private val practiceSessionRepository: PracticeSessionRepository,
     private val pieceRepository: PieceRepository,
     private val lessonNoteRepository: LessonNoteRepository,
@@ -30,23 +27,9 @@ class DashboardService(
 
     @Transactional(readOnly = true)
     fun getDashboard(userId: Long, zoneId: ZoneId): DashboardView {
-        val user = userRepository.findById(userId)
-            .orElseThrow { EntityNotFoundException("User", userId) }
-
-        val today = LocalDate.now(zoneId)
-        val todayStart = today.atStartOfDay(zoneId).toInstant()
-        val todayEnd = today.plusDays(1).atStartOfDay(zoneId).toInstant()
-
-        val todayDuration = practiceSessionRepository.sumDurationInRange(userId, todayStart, todayEnd)
-        val todayMinutes = todayDuration / SECONDS_PER_MINUTE
-        val todayPercent = if (user.dailyGoalMinutes > 0) {
-            minOf(todayMinutes * PERCENT_MAX / user.dailyGoalMinutes, PERCENT_MAX)
-        } else {
-            0
-        }
-
         val goals = goalService.getGoals(userId, zoneId)
 
+        val today = LocalDate.now(zoneId)
         val weekStart = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
         val weekEnd = weekStart.plusDays(DAYS_IN_WEEK.toLong())
         val weekStartInstant = weekStart.atStartOfDay(zoneId).toInstant()
@@ -68,17 +51,20 @@ class DashboardService(
 
         val latestNote = lessonNoteRepository.findLatestByUserId(userId)
         val latestLessonNoteView = latestNote?.let { note ->
-            val pieces = note.notePieces.mapNotNull { np ->
-                pieceRepository.findByIdAndUserIdAndDeletedAtIsNull(np.pieceId, userId)
+            val pieceIds = note.notePieces.map { it.pieceId }
+            val pieces = if (pieceIds.isNotEmpty()) {
+                pieceRepository.findByIdInAndUserIdAndDeletedAtIsNull(pieceIds, userId)
+            } else {
+                emptyList()
             }
             LessonNoteView.from(note, pieces)
         }
 
         return DashboardView(
             today = TodayView(
-                goalMinutes = user.dailyGoalMinutes,
-                achievedMinutes = todayMinutes,
-                percent = todayPercent,
+                goalMinutes = goals.daily.targetMinutes,
+                achievedMinutes = goals.daily.achievedMinutes,
+                percent = goals.daily.percent,
             ),
             streak = DashboardStreakView(
                 currentDays = goals.streak.currentDays,
@@ -92,8 +78,6 @@ class DashboardService(
     }
 
     companion object {
-        private const val SECONDS_PER_MINUTE = 60
-        private const val PERCENT_MAX = 100
         private const val DAYS_IN_WEEK = 7
     }
 }
