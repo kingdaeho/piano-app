@@ -1,0 +1,14 @@
+# IDE
+.idea/
+*.iml
+
+# OS
+.DS_Store
+
+# Claude
+.claude/
+
+# Environment
+.env
+.env.local
+.env.production
